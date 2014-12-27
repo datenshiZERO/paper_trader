@@ -33,6 +33,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 
 gem 'rails_admin'
+gem 'devise'
 gem 'haml'
 gem 'bootstrap-sass', '~> 3.3.1.0'
 gem 'typhoeus'

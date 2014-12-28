@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141227120953) do
+ActiveRecord::Schema.define(version: 20141228233133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,12 @@ ActiveRecord::Schema.define(version: 20141227120953) do
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
 
+  create_table "day_ticker_logs", force: :cascade do |t|
+    t.date     "log_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "securities", force: :cascade do |t|
     t.string   "symbol"
     t.string   "company_name"
@@ -49,5 +55,16 @@ ActiveRecord::Schema.define(version: 20141227120953) do
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
   end
+
+  create_table "ticker_logs", force: :cascade do |t|
+    t.datetime "ticker_as_of"
+    t.text     "ticker_json"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "day_ticker_log_id"
+  end
+
+  add_index "ticker_logs", ["day_ticker_log_id"], name: "index_ticker_logs_on_day_ticker_log_id", using: :btree
+  add_index "ticker_logs", ["ticker_as_of"], name: "index_ticker_logs_on_ticker_as_of", unique: true, using: :btree
 
 end

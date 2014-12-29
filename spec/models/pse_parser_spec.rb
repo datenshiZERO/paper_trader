@@ -34,5 +34,31 @@ RSpec.describe PseParser do
       expect { PseParser.new.parse_ticker }.to change { Security.where(symbol: '2GO').count }.by(1)
     end
 
+    it 'should create a new record for all missing securities' do
+      expect { PseParser.new.parse_ticker }.to change { Security.count }.by(27)
+    end
+
+  end
+
+  describe 'StockDayLog' do
+    it 'should create a new record for each Security' do
+      expect { PseParser.new.parse_ticker }.to change { StockDayLog.count }.by(27)
+    end
+
+    #it 'should not create a new record when same timestamp already exists' do
+      #create(:ticker_log)
+      #expect { PseParser.new.parse_ticker }.to change { TickerLog.count }.by(0)
+    #end
+  end
+
+  describe 'StockTickerLog' do
+    it 'should create a new record for each Security' do
+      expect { PseParser.new.parse_ticker }.to change { StockTickerLog.count }.by(27)
+    end
+
+    #it 'should not create a new record when same timestamp already exists' do
+      #create(:ticker_log)
+      #expect { PseParser.new.parse_ticker }.to change { TickerLog.count }.by(0)
+    #end
   end
 end

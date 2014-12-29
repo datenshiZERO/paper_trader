@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141228233133) do
+ActiveRecord::Schema.define(version: 20141229000856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,32 @@ ActiveRecord::Schema.define(version: 20141228233133) do
     t.datetime "updated_at",                                   null: false
   end
 
+  create_table "stock_day_logs", force: :cascade do |t|
+    t.integer  "security_id"
+    t.integer  "day_ticker_log_id"
+    t.decimal  "volume_traded"
+    t.decimal  "open_price",        precision: 8, scale: 3
+    t.decimal  "high_price",        precision: 8, scale: 3
+    t.decimal  "low_price",         precision: 8, scale: 3
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+  end
+
+  add_index "stock_day_logs", ["day_ticker_log_id"], name: "index_stock_day_logs_on_day_ticker_log_id", using: :btree
+  add_index "stock_day_logs", ["security_id"], name: "index_stock_day_logs_on_security_id", using: :btree
+
+  create_table "stock_ticker_logs", force: :cascade do |t|
+    t.integer  "stock_day_log_id"
+    t.integer  "ticker_log_id"
+    t.decimal  "total_volume"
+    t.decimal  "price",            precision: 8, scale: 3
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  add_index "stock_ticker_logs", ["stock_day_log_id"], name: "index_stock_ticker_logs_on_stock_day_log_id", using: :btree
+  add_index "stock_ticker_logs", ["ticker_log_id"], name: "index_stock_ticker_logs_on_ticker_log_id", using: :btree
+
   create_table "ticker_logs", force: :cascade do |t|
     t.datetime "ticker_as_of"
     t.text     "ticker_json"
@@ -67,4 +93,8 @@ ActiveRecord::Schema.define(version: 20141228233133) do
   add_index "ticker_logs", ["day_ticker_log_id"], name: "index_ticker_logs_on_day_ticker_log_id", using: :btree
   add_index "ticker_logs", ["ticker_as_of"], name: "index_ticker_logs_on_ticker_as_of", unique: true, using: :btree
 
+  add_foreign_key "stock_day_logs", "day_ticker_logs"
+  add_foreign_key "stock_day_logs", "securities"
+  add_foreign_key "stock_ticker_logs", "stock_day_logs"
+  add_foreign_key "stock_ticker_logs", "ticker_logs"
 end

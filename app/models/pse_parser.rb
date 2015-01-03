@@ -4,7 +4,7 @@ class PseParser
 
   def parse_ticker
     ticker = get_json
-    ticker_time = DateTime.strptime(ticker.first['securityAlias'], "%m/%d/%Y %I:%M %p")
+    ticker_time = DateTime.strptime(ticker.first['securityAlias'] + " +0800", "%m/%d/%Y %I:%M %p %z")
 
     return if TickerLog.exists?(ticker_as_of: ticker_time)
 
@@ -30,7 +30,7 @@ class PseParser
 
       stock = stock_hash[s['securitySymbol']]
       stock_day_log = stock.stock_day_logs.where(day_ticker_log: day_ticker_log).first
-      total_volume = BigDecimal.new(s['totalVolume'].gsub(",", "")),
+      total_volume = BigDecimal.new(s['totalVolume'].gsub(",", ""))
       price = BigDecimal.new(s['lastTradedPrice'].gsub(",", ""))
 
       StockTickerLog.create(
@@ -39,6 +39,8 @@ class PseParser
         total_volume: total_volume,
         price: price
       )
+
+      stock.last_price = price
 
       stock_day_log.volume_traded = total_volume
       stock.volume_traded = total_volume
@@ -56,6 +58,7 @@ class PseParser
         stock.high_price = price
       end
       stock_day_log.save
+      stock.percent_change_close = s['percChangeClose'].to_f
       stock.save
     end
   end
@@ -72,6 +75,8 @@ class PseParser
       day_log = DayTickerLog.create(log_at: ticker_day)
       stock_hash.each_value do |s|
         StockDayLog.create security: s, day_ticker_log: day_log
+        s.previous_close = s.last_price
+        s.save
       end
       day_log
     end

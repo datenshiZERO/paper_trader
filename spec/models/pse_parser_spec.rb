@@ -38,6 +38,10 @@ RSpec.describe PseParser do
       expect { PseParser.new.parse_ticker }.to change { Security.count }.by(27)
     end
 
+    it 'should update security volume' do
+      create(:security, volume_traded: 0)
+      expect { PseParser.new.parse_ticker }.to change { Security.first.volume_traded }.by(23000)
+    end
   end
 
   describe 'StockDayLog' do

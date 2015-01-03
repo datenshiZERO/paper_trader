@@ -1,0 +1,7 @@
+- unless @day_ticker_log.nil?
+  %p
+    As of
+    = @day_ticker_log.ticker_logs.last.ticker_as_of
+  = render partial: "shared/stats_table", locals: { header: "Most Active (Volume x Price)", values: @most_active }
+  = render partial: "shared/stats_table", locals: { header: "Gainers", values: @gainers }
+  = render partial: "shared/stats_table", locals: { header: "Losers", values: @losers }

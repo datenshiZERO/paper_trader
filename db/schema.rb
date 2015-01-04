@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150103140009) do
+ActiveRecord::Schema.define(version: 20150104115123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,34 @@ ActiveRecord::Schema.define(version: 20150103140009) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "portfolio_entries", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "security_id"
+    t.decimal  "shares"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "portfolio_entries", ["security_id"], name: "index_portfolio_entries_on_security_id", using: :btree
+  add_index "portfolio_entries", ["user_id"], name: "index_portfolio_entries_on_user_id", using: :btree
+
+  create_table "portfolio_transactions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "security_id"
+    t.integer  "stock_ticker_log_id"
+    t.integer  "portfolio_entry_id"
+    t.decimal  "shares"
+    t.boolean  "buy"
+    t.decimal  "fees",                precision: 11, scale: 3
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+  end
+
+  add_index "portfolio_transactions", ["portfolio_entry_id"], name: "index_portfolio_transactions_on_portfolio_entry_id", using: :btree
+  add_index "portfolio_transactions", ["security_id"], name: "index_portfolio_transactions_on_security_id", using: :btree
+  add_index "portfolio_transactions", ["stock_ticker_log_id"], name: "index_portfolio_transactions_on_stock_ticker_log_id", using: :btree
+  add_index "portfolio_transactions", ["user_id"], name: "index_portfolio_transactions_on_user_id", using: :btree
 
   create_table "securities", force: :cascade do |t|
     t.string   "symbol"
@@ -94,23 +122,30 @@ ActiveRecord::Schema.define(version: 20150103140009) do
   add_index "ticker_logs", ["ticker_as_of"], name: "index_ticker_logs_on_ticker_as_of", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                                           default: "",        null: false
+    t.string   "encrypted_password",                              default: "",        null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",                                   default: 0,         null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "cash",                   precision: 14, scale: 2, default: 2000000.0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "portfolio_entries", "securities"
+  add_foreign_key "portfolio_entries", "users"
+  add_foreign_key "portfolio_transactions", "portfolio_entries"
+  add_foreign_key "portfolio_transactions", "securities"
+  add_foreign_key "portfolio_transactions", "stock_ticker_logs"
+  add_foreign_key "portfolio_transactions", "users"
   add_foreign_key "stock_day_logs", "day_ticker_logs"
   add_foreign_key "stock_day_logs", "securities"
   add_foreign_key "stock_ticker_logs", "stock_day_logs"

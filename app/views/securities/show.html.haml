@@ -1,0 +1,30 @@
+.row
+  .col-md-10
+    %h1= @security.company_name 
+    %h2= @security.symbol 
+
+    %p
+      As of
+      = @day_ticker_log.ticker_logs.last.ticker_as_of
+    %table.table.table-condensed.table-striped
+      %tr
+        %td Last Trade Price
+        %td.text-right= number_with_precision @security.last_price, precision: 2, delimiter: ','
+      %tr
+        %td Open
+        %td.text-right= number_with_precision @security.open_price, precision: 2, delimiter: ','
+      %tr
+        %td High
+        %td.text-right= number_with_precision @security.high_price, precision: 2, delimiter: ','
+      %tr
+        %td Low
+        %td.text-right= number_with_precision @security.low_price, precision: 2, delimiter: ','
+      %tr
+        %td Volume
+        %td.text-right= number_with_delimiter @security.volume_traded.to_i
+      %tr
+        %td % Change
+        %td.text-right{ class: @security.display_class }
+          = number_with_precision @security.percent_change_close, precision: 2
+  .col-md-2
+    = render "shared/ads"

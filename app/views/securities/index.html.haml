@@ -1,0 +1,19 @@
+.row
+  .col-md-10
+    %h1 List of Companies
+    %p
+      As of
+      = @day_ticker_log.ticker_logs.last.ticker_as_of
+
+    %table.table.table-condensed.table-striped
+      %tr
+        %th.text-center Company Name
+        %th.text-center Symbol
+        %th.text-center Price
+      - @securities.each do |stock|
+        %tr
+          %td= link_to stock.company_name, stock
+          %td= stock.symbol
+          %td.text-right= number_with_precision stock.last_price, precision: 2, delimiter: ','
+  .col-md-2
+    = render "shared/ads"

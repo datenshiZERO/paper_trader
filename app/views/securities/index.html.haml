@@ -10,10 +10,19 @@
         %th.text-center Company Name
         %th.text-center Symbol
         %th.text-center Price
+        %th.text-center % Change
+        - if user_signed_in?
+          %th
       - @securities.each do |stock|
         %tr
           %td= link_to stock.company_name, stock
           %td= stock.symbol
           %td.text-right= number_with_precision stock.last_price, precision: 2, delimiter: ','
+          %td.text-right{ class: stock.display_class }
+            = number_with_precision stock.percent_change_close, precision: 2
+          - if user_signed_in?
+            %td.text-right
+              = link_to "Buy", buy_security_path(stock), :class => "btn btn-default btn-xs"
+              = link_to "Sell", sell_security_path(stock), :class => "btn btn-default btn-xs"
   .col-md-2
     = render "shared/ads"

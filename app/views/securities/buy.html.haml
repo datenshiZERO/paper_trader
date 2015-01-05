@@ -1,0 +1,40 @@
+%h1 Buy Stock
+
+%h2
+  = @security.company_name 
+  = "(#{@security.symbol})"
+
+.row
+  .col-md-4
+    %table.table.table-condensed.table-striped
+      %tr
+        %td Last Trade Price
+        %td.text-right= number_with_precision @security.last_price, precision: 2, delimiter: ','
+      %tr
+        %td Open
+        %td.text-right= number_with_precision @security.open_price, precision: 2, delimiter: ','
+      %tr
+        %td Board Lot
+        %td.text-right= number_with_delimiter @security.board_lot
+  .col-md-4
+    %table.table.table-condensed.table-striped
+      %tr
+        %td High
+        %td.text-right= number_with_precision @security.high_price, precision: 2, delimiter: ','
+      %tr
+        %td Low
+        %td.text-right= number_with_precision @security.low_price, precision: 2, delimiter: ','
+  .col-md-4
+    %table.table.table-condensed.table-striped
+      %tr
+        %td Volume
+        %td.text-right= number_with_delimiter @security.volume_traded.to_i
+      %tr
+        %td % Change
+        %td.text-right{ class: @security.display_class }
+          = number_with_precision @security.percent_change_close, precision: 2
+
+.row
+  .col-md-6
+    = simple_form_for @transaction, url: process_buy_security_path(@security) do |f|
+      = f.input :shares, hint: "Must be in multiples of #{@security.board_lot}"

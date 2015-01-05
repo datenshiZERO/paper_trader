@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
-  resources :securities
+  resources :securities do
+    member do
+      get 'buy'
+      post 'process_buy'
+      get 'sell'
+      post 'process_sell'
+    end
+  end
+
   devise_for :users
   devise_scope :user do
     get 'login', :to => 'devise/sessions#new'

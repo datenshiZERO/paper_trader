@@ -4,6 +4,7 @@ class PseParser
 
   def parse_ticker
     ticker = get_json
+    return if ticker.length == 0
     ticker_time = DateTime.strptime(ticker.first['securityAlias'] + " +0800", "%m/%d/%Y %I:%M %p %z")
 
     return if TickerLog.exists?(ticker_as_of: ticker_time)

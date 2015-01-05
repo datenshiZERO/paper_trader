@@ -46,7 +46,7 @@
 
     .container.main-container
       - flash.each do |name, msg|
-        %div{:class => "alert alert-#{name == :notice ? "success" : "danger"}"}
+        %div{:class => "alert alert-#{name == "notice" ? "success" : "danger"}"}
           %a.close{"data-dismiss" => "alert"} ×
           = msg
       .row
@@ -57,6 +57,8 @@
         %p
           &copy; 2015
           = link_to "Bryan Bibat", "http://bryanbibat.net"
+        %p
+          This game is for educational purposes only and has no relation with PSE or any of the companies featured.
           -#%br
           -#= link_to "Fork this on Github", "https://github.com/phrug/pinoyrb"
 

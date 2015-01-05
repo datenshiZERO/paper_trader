@@ -21,3 +21,10 @@
 
 en:
   hello: "Hello world"
+  time: 
+    formats:
+      default: "%d %B %Y %I:%M:%S %p"
+  number:
+    currency:
+      format:
+        unit: "₱"

@@ -1,7 +1,20 @@
 .row
   .col-md-8
-    %h1 Pages#index
-    %p Find me in app/views/pages/index.html.erb
+    %h1 PSE Paper Trading Game
+    - if user_signed_in?
+      %p 
+        = "Welcome back #{current_user.email}!"
+      %p
+        You currently have
+        = number_to_currency current_user.cash
+        in cash and
+        = number_to_currency 0
+        in stocks.
+    - else
+      %p
+        Welcome to the currently untitled paper trading game for the Philippine stocks. Here you can try your hand at both investing and speculation without spending a single peso.
+      %p= link_to "Sign up now &raquo".html_safe, new_user_registration_path, :class => "btn btn-success btn-lg"
+
   .col-md-4
     = render 'shared/ads'
     = render 'shared/day_basic_stats'

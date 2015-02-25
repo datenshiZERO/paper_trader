@@ -3,6 +3,14 @@ class PseParser
   NOT_STOCK = ["Stock Update As of", "PSE", "ALL", "FIN", "IND", "HDG", "PRO", "SVC", "M-O"]
 
   def parse_ticker
+    begin
+      perform_parsing
+    rescue => e
+      ParsingErrorLog.create(error_message: e.message, error_text: e.backtrace)
+    end
+  end
+
+  def perform_parsing
     ticker = get_json
     return if ticker.length == 0
     ticker_time = DateTime.strptime(ticker.first['securityAlias'] + " +0800", "%m/%d/%Y %I:%M %p %z")

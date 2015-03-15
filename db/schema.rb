@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150315043548) do
+ActiveRecord::Schema.define(version: 20150315151439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,16 @@ ActiveRecord::Schema.define(version: 20150315043548) do
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
     t.decimal  "closing_price",     precision: 8, scale: 3
+    t.decimal  "ema_12",            precision: 8, scale: 3
+    t.decimal  "ema_14_up",         precision: 8, scale: 3
+    t.decimal  "ema_14_down",       precision: 8, scale: 3
+    t.decimal  "ema_26",            precision: 8, scale: 3
+    t.decimal  "ema_30",            precision: 8, scale: 3
+    t.decimal  "sma_10",            precision: 8, scale: 3
+    t.decimal  "rsi",               precision: 8, scale: 3
+    t.decimal  "macd_signal",       precision: 8, scale: 3
+    t.decimal  "macd_divergence",   precision: 8, scale: 3
+    t.decimal  "previous_close",    precision: 8, scale: 3
   end
 
   add_index "stock_day_logs", ["day_ticker_log_id"], name: "index_stock_day_logs_on_day_ticker_log_id", using: :btree

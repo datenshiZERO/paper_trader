@@ -17,7 +17,7 @@ class SecuritiesController < ApplicationController
        WHERE stock_day_logs.security_id = ?
        ORDER BY stock_day_logs.created_at", @security.id])
     @json_history = JSON.generate(history.map do |d|
-      [d.log_at.to_datetime.to_i, 
+      [d.log_at.to_datetime.to_i * 1000,
        d.open_price.to_f,
        d.high_price.to_f,
        d.low_price.to_f,

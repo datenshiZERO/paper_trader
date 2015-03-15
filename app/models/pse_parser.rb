@@ -103,7 +103,13 @@ class PseParser
     Security.all.each do |s|
       day_logs = s.stock_day_logs.order(:created_at).all
       (day_logs.length - 1).times do |i|
-        day_logs[i].closing_price = day_logs[i + 1].open_price
+        next_price = day_logs[i + 1].open_price
+        if next_price > day_logs[i].high_price
+          next_price = day_logs[i].high_price
+        elsif next_price < day_logs[i].high_price
+          next_price = day_logs[i].low_price
+        end
+        day_logs[i].closing_price = next_price
         day_logs[i].save
       end
       day_logs[-1].closing_price = s.last_price

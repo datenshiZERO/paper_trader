@@ -104,10 +104,12 @@ class PseParser
       day_logs = s.stock_day_logs.order(:created_at).all
       (day_logs.length - 1).times do |i|
         next_price = day_logs[i + 1].open_price
-        if next_price > day_logs[i].high_price
-          next_price = day_logs[i].high_price
-        elsif next_price < day_logs[i].high_price
-          next_price = day_logs[i].low_price
+        unless next_price == nil
+          if next_price > day_logs[i].high_price
+            next_price = day_logs[i].high_price
+          elsif next_price < day_logs[i].low_price
+            next_price = day_logs[i].low_price
+          end
         end
         day_logs[i].closing_price = next_price
         day_logs[i].save

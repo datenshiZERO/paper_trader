@@ -1,3 +1,7 @@
+- content_for :data_scripts do
+  :javascript
+    window.StockData = #{raw @json_history};
+
 .row
   .col-md-10
     %h1= @security.company_name 
@@ -26,5 +30,6 @@
         %td % Change
         %td.text-right{ class: @security.display_class }
           = number_with_precision @security.percent_change_close, precision: 2
+    #chart-container
   .col-md-2
     = render "shared/ads"

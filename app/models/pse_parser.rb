@@ -105,7 +105,9 @@ class PseParser
       (day_logs.length - 1).times do |i|
         next_price = day_logs[i + 1].open_price
         unless next_price == nil
-          if next_price > day_logs[i].high_price
+          if day_logs[i].high_price.nil? || day_logs[i].low_price.nil?
+            next_price = nil
+          elsif next_price > day_logs[i].high_price
             next_price = day_logs[i].high_price
           elsif next_price < day_logs[i].low_price
             next_price = day_logs[i].low_price

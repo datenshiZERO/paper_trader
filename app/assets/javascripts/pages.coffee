@@ -28,7 +28,7 @@ if window.StockData?
   # create the chart
   $('#chart-container').highcharts 'StockChart',
     rangeSelector: selected: 1
-    title: text: 'AAPL Historical'
+    title: text: "#{window.Stock} Historical"
     yAxis: [
       {
         labels:
@@ -52,7 +52,7 @@ if window.StockData?
     series: [
       {
         type: 'candlestick'
-        name: 'AAPL'
+        name: window.Stock
         data: ohlc
         dataGrouping: units: groupingUnits
       }

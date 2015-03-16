@@ -219,6 +219,23 @@ class PseParser
   def self.calculate_day_technicals
     Security.all.each do |s|
       day_logs = s.stock_day_logs.order(:created_at).all
+      last_log = day_logs.last
+      if last_log.closing_price.nil?
+        last_log.closing_price = s.last_price
+      end
+      if last_log.open_price.nil?
+        last_log.open_price = s.last_price
+      end
+      if last_log.high_price.nil?
+        last_log.high_price = [last_log.closing_price, last_log.open_price].max
+      end
+      if last_log.low_price.nil?
+        last_log.low_price = [last_log.closing_price, last_log.open_price].min
+      end
+      if last_log.volume_traded.nil?
+        last_log.volume_traded = 0
+      end
+
       if day_logs.length >= 10
         day_logs[-1].sma_10 = (day_logs[-10..-1].sum(&:closing_price) / 10).round(3)
       end

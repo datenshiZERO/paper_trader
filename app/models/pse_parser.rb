@@ -84,7 +84,7 @@ class PseParser
     else
       day_log = DayTickerLog.create(log_at: ticker_day)
       stock_hash.each_value do |s|
-        StockDayLog.create security: s, day_ticker_log: day_log
+        StockDayLog.create security: s, day_ticker_log: day_log, previous_close: s.last_price
         s.previous_close = s.last_price
         s.save
       end
@@ -219,6 +219,10 @@ class PseParser
   def self.calculate_day_technicals
     Security.all.each do |s|
       last_log = s.stock_day_logs.order("created_at desc").first
+      if last_log.previous_close.nil?
+        previous_log = s.stock_day_logs.order("created_at desc").offset(1).first
+        last_log.previous_close = previous_log.closing_price
+      end
       if last_log.closing_price.nil?
         last_log.closing_price = s.last_price
       end

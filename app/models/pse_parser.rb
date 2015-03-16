@@ -218,8 +218,7 @@ class PseParser
 
   def self.calculate_day_technicals
     Security.all.each do |s|
-      day_logs = s.stock_day_logs.order(:created_at).all
-      last_log = day_logs.last
+      last_log = s.stock_day_logs.order("created_at desc").first
       if last_log.closing_price.nil?
         last_log.closing_price = s.last_price
       end
@@ -235,6 +234,9 @@ class PseParser
       if last_log.volume_traded.nil?
         last_log.volume_traded = 0
       end
+      last_log.save
+
+      day_logs = s.stock_day_logs.order(:created_at).all
 
       if day_logs.length >= 10
         day_logs[-1].sma_10 = (day_logs[-10..-1].sum(&:closing_price) / 10).round(3)

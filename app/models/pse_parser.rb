@@ -221,7 +221,9 @@ class PseParser
       last_log = s.stock_day_logs.order("created_at desc").first
       if last_log.previous_close.nil?
         previous_log = s.stock_day_logs.order("created_at desc").offset(1).first
-        last_log.previous_close = previous_log.closing_price
+        if previous_log.present?
+          last_log.previous_close = previous_log.closing_price
+        end
       end
       if last_log.closing_price.nil?
         last_log.closing_price = s.last_price

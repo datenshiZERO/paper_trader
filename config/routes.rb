@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   resources :securities do
+    collection do
+      get 'rsi'
+    end
     member do
       get 'buy'
       post 'process_buy'

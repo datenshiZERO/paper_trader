@@ -1,9 +1,13 @@
 class SecuritiesController < ApplicationController
   before_action :authenticate_user!, only: [:buy, :process_buy, :sell, :process_sell]
-
   def index
     @securities = Security.order(:symbol).all
     @day_ticker_log = DayTickerLog.last
+  end
+
+  def rsi
+    @day_ticker_log = DayTickerLog.last
+    @securities = @day_ticker_log.securities.order("stock_day_logs.rsi").all
   end
 
   def show

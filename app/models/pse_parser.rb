@@ -86,6 +86,7 @@ class PseParser
       stock_hash.each_value do |s|
         StockDayLog.create security: s, day_ticker_log: day_log, previous_close: s.last_price
         s.previous_close = s.last_price
+        s.volume_traded = 0
         s.save
       end
       day_log

@@ -1,0 +1,33 @@
+.row
+  .col-md-10
+    %h1 List of Companies
+    %p
+      As of
+      = l @day_ticker_log.ticker_logs.last.ticker_as_of
+
+    %table.table.table-condensed.table-striped
+      %tr
+        %th.text-center Company Name
+        %th.text-center Symbol
+        %th.text-center Price
+        %th.text-center % Change
+        %th.text-center Volume
+        %th.text-center RSI
+        - if user_signed_in?
+          %th
+      - @securities.each do |stock|
+        %tr
+          %td= link_to stock.company_name, stock
+          %td= stock.symbol
+          %td.text-right= number_with_precision stock.last_price, precision: 2, delimiter: ','
+          %td.text-right{ class: stock.display_class }
+            = number_with_precision stock.percent_change_close, precision: 2
+          %td.text-right= number_with_precision stock.volume_traded, precision: 2, delimiter: ','
+          %td.text-right
+            = number_with_precision stock.stock_day_logs.where(day_ticker_log: @day_ticker_log).first.rsi, precision: 2
+          - if user_signed_in?
+            %td.text-right
+              = link_to "Buy", buy_security_path(stock), :class => "btn btn-default btn-xs"
+              = link_to "Sell", sell_security_path(stock), :class => "btn btn-default btn-xs"
+  .col-md-2
+    = render "shared/ads"

@@ -1,5 +1,5 @@
 .row
-  .col-md-8
+  .col-md-12
     %h1 PSE Paper Trading Game
     - if user_signed_in?
       %p 
@@ -15,6 +15,18 @@
         Welcome to the currently untitled paper trading game for the Philippine stocks. Here you can try your hand at both investing and speculation without spending a single peso.
       %p= link_to "Sign up now &raquo".html_safe, new_user_registration_path, :class => "btn btn-success btn-lg"
 
-  .col-md-4
-    = render 'shared/ads'
-    = render 'shared/day_basic_stats'
+  - unless @day_ticker_log.nil?
+    .col-md-12
+      %p
+        As of
+        = @day_ticker_log.ticker_logs.last.ticker_as_of
+    .col-md-4
+      = render partial: "shared/stats_table", locals: { header: "Most Active (Volume x Price)", values: @most_active }
+    .col-md-4
+      = render partial: "shared/stats_table", locals: { header: "Gainers", values: @gainers }
+    .col-md-4
+      = render partial: "shared/stats_table", locals: { header: "Losers", values: @losers }
+
+  -#.col-md-4
+    -#= render 'shared/ads'
+    -#= render 'shared/day_basic_stats'

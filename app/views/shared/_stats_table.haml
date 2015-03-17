@@ -8,7 +8,7 @@
     %th.text-center Change
   - values.each do |stock|
     %tr
-      %td= stock.symbol
+      %td= link_to stock.symbol, stock
       %td.text-right= number_with_delimiter stock.volume_traded.to_i
       %td.text-right= number_with_precision stock.last_price, precision: 2, delimiter: ','
       %td.text-right{ class: stock.display_class }

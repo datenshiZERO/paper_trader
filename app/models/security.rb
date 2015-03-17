@@ -1,5 +1,5 @@
 class Security < ActiveRecord::Base
-  has_many :stock_day_logs
+  has_many :stock_day_logs, dependent: :destroy
 
   def display_class
     if percent_change_close > 0

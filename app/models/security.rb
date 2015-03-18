@@ -11,8 +11,18 @@ class Security < ActiveRecord::Base
     end
   end
 
+  def populate_previous_close
+    day_logs = s.stock_day_logs.order(:created_at).all
+    (day_logs.length - 1).times do |i|
+      next if day_logs[i + 1].previous_close.present?
+      day_logs[i + 1].previous_close = day_logs[i].closing_price
+      day_logs[i + 1].save
+    end
+  end
 
   def populate_technicals
+    populate_previous_close
+
     day_logs = self.stock_day_logs.order(:created_at).all (day_logs.length - 9).times do |i|
       day_logs[9 + i].sma_10 = (day_logs[(0 + i)..(9 + i)].sum(&:closing_price) / 10).round(3)
     end

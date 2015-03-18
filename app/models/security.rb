@@ -11,19 +11,29 @@ class Security < ActiveRecord::Base
     end
   end
 
-  def populate_previous_close
-    day_logs = self.stock_day_logs.order(:created_at).all
+  def populate_closing_price
+    day_logs = self.stock_day_logs.order("created_at desc").all
+    last_log = day_logs.first
+    if last_log.closing_price.blank?
+      last_log.closing_price = last_price
+      last_log.save
+    end
+
     (day_logs.length - 1).times do |i|
-      next if day_logs[i + 1].previous_close.present?
-      day_logs[i + 1].previous_close = day_logs[i].closing_price
+      next if day_logs[i + 1].closing_price.present?
+      day_logs[i + 1].closing_price = day_logs[i].closing_price
+      day_logs[i + 1].open_price = day_logs[i].closing_price
+      day_logs[i + 1].high_price = day_logs[i].closing_price
+      day_logs[i + 1].low_price = day_logs[i].closing_price
       day_logs[i + 1].save
     end
   end
 
   def populate_technicals
-    populate_previous_close
+    populate_closing_prices
 
-    day_logs = self.stock_day_logs.order(:created_at).all (day_logs.length - 9).times do |i|
+    day_logs = self.stock_day_logs.order(:created_at).all
+    (day_logs.length - 9).times do |i|
       day_logs[9 + i].sma_10 = (day_logs[(0 + i)..(9 + i)].sum(&:closing_price) / 10).round(3)
     end
     if day_logs.length >= 12
@@ -77,6 +87,7 @@ class Security < ActiveRecord::Base
   end
 
   def calculate_day_technicals
+    populate_closing_price
     last_log = self.stock_day_logs.order("created_at desc").first
     if last_log.previous_close.nil?
       previous_log = self.stock_day_logs.order("created_at desc").offset(1).first

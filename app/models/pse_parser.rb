@@ -168,7 +168,11 @@ class PseParser
 
   def self.calculate_day_technicals
     Security.all.each do |s|
-      s.calculate_day_technicals
+      begin 
+        s.calculate_day_technicals
+      rescue
+        s.populate_technicals
+      end
     end
   end
 end

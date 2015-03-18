@@ -15,7 +15,7 @@ class Security < ActiveRecord::Base
     day_logs = self.stock_day_logs.order("created_at desc").all
     last_log = day_logs.first
     if last_log.closing_price.blank?
-      last_log.closing_price = last_price
+      last_log.closing_price = previous_close
       last_log.save
     end
 
@@ -30,7 +30,7 @@ class Security < ActiveRecord::Base
   end
 
   def populate_technicals
-    populate_closing_prices
+    populate_closing_price
 
     day_logs = self.stock_day_logs.order(:created_at).all
     (day_logs.length - 9).times do |i|

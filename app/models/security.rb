@@ -12,7 +12,7 @@ class Security < ActiveRecord::Base
   end
 
   def populate_previous_close
-    day_logs = s.stock_day_logs.order(:created_at).all
+    day_logs = self.stock_day_logs.order(:created_at).all
     (day_logs.length - 1).times do |i|
       next if day_logs[i + 1].previous_close.present?
       day_logs[i + 1].previous_close = day_logs[i].closing_price

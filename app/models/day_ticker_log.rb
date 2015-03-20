@@ -5,7 +5,7 @@ class DayTickerLog < ActiveRecord::Base
 
   def fix_non_moving
     stock_day_logs.each do |s|
-      if s.volume_traded.empty? || s.volume_traded == 0
+      if s.volume_traded.blank? || s.volume_traded == 0
         s.open_price = s.previous_close
         s.high_price = s.previous_close
         s.low_price = s.previous_close

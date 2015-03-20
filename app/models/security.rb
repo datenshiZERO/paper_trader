@@ -75,8 +75,8 @@ class Security < ActiveRecord::Base
         day_logs[i].ema_30 = (day_logs[i].closing_price * (2.0/31.0) + day_logs[i - 1].ema_30 * (1 - (2.0/31.0))).round(3)
       end
       if i == 34
-        day_logs[33].macd_signal = (day_logs[25..34].sum(&:macd) / 9).round(3)
-        day_logs[33].macd_divergence = day_logs[34].macd - day_logs[34].macd_signal 
+        day_logs[33].macd_signal = (day_logs[25..33].sum(&:macd) / 9).round(3)
+        day_logs[33].macd_divergence = day_logs[33].macd - day_logs[33].macd_signal 
       end
       if i > 34
         day_logs[i].macd_signal = (day_logs[i].macd * (2.0/10.0) + day_logs[i - 1].macd_signal * (1 - (2.0/10.0))).round(3)

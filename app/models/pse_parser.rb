@@ -167,12 +167,13 @@ class PseParser
   end
 
   def self.calculate_day_technicals
+    DayTickerLog.last.fix_non_moving
     Security.all.each do |s|
-      begin 
+      #begin 
         s.calculate_day_technicals
-      rescue
-        s.populate_technicals
-      end
+      #rescue
+        #s.populate_technicals
+      #end
     end
   end
 end

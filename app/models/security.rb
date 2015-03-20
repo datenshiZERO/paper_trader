@@ -87,31 +87,6 @@ class Security < ActiveRecord::Base
   end
 
   def calculate_day_technicals
-    populate_closing_price
-    last_log = self.stock_day_logs.order("created_at desc").first
-    if last_log.previous_close.nil?
-      previous_log = self.stock_day_logs.order("created_at desc").offset(1).first
-      if previous_log.present?
-        last_log.previous_close = previous_log.closing_price
-      end
-    end
-    if last_log.closing_price.nil?
-      last_log.closing_price = self.last_price
-    end
-    if last_log.open_price.nil?
-      last_log.open_price = self.last_price
-    end
-    if last_log.high_price.nil?
-      last_log.high_price = [last_log.closing_price, last_log.open_price].max
-    end
-    if last_log.low_price.nil?
-      last_log.low_price = [last_log.closing_price, last_log.open_price].min
-    end
-    if last_log.volume_traded.nil?
-      last_log.volume_traded = 0
-    end
-    last_log.save
-
     day_logs = self.stock_day_logs.order(:created_at).all
 
     if day_logs.length >= 10

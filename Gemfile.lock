@@ -46,6 +46,8 @@ GEM
     builder (3.2.2)
     byebug (5.0.0)
       columnize (= 0.9.0)
+    celluloid (0.16.0)
+      timers (~> 4.0.0)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -54,6 +56,7 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     columnize (0.9.0)
+    connection_pool (2.1.2)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     debug_inspector (0.0.2)
@@ -87,6 +90,7 @@ GEM
       haml (>= 4.0.6, < 5.0)
       html2haml (>= 1.0.1)
       railties (>= 4.0.1)
+    hitimes (1.2.2)
     html2haml (2.0.0)
       erubis (~> 2.7.0)
       haml (~> 4.0.0)
@@ -171,6 +175,9 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     rdoc (4.2.0)
+    redis (3.2.1)
+    redis-namespace (1.5.1)
+      redis (~> 3.0, >= 3.0.4)
     remotipart (1.2.1)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
@@ -205,6 +212,12 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     sexp_processor (4.6.0)
+    sidekiq (3.3.2)
+      celluloid (>= 0.16.0)
+      connection_pool (>= 2.1.1)
+      json
+      redis (>= 3.0.6)
+      redis-namespace (>= 1.3.1)
     simple_form (3.1.0)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
@@ -222,6 +235,8 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
+    timers (4.0.1)
+      hitimes
     typhoeus (0.7.2)
       ethon (>= 0.7.4)
     tzinfo (1.2.2)
@@ -259,6 +274,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
+  sidekiq
   simple_form
   sinatra
   spring

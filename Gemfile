@@ -54,6 +54,7 @@ end
 
 group :development do
   gem 'mina'
+  gem 'mina-sidekiq'
 end
 
 group :test do

@@ -74,7 +74,11 @@ class PseParser
   end
 
   def get_json
-    JSON.load(Typhoeus.get(TICKER_URL).body)
+    response = Typhoeus.get(TICKER_URL)
+    unless response.success?
+      raise TyphoeusError, response.return_code
+    end
+    JSON.load(response.body)
   end
 
   def get_or_generate_day_log(ticker_time, stock_hash)

@@ -74,7 +74,7 @@ class PseParser
   end
 
   def get_json
-    response = Typhoeus.get(TICKER_URL)
+    response = Typhoeus.get(TICKER_URL, timeout: 120)
     unless response.success?
       raise Typhoeus::Errors::TyphoeusError, response.return_code
     end
